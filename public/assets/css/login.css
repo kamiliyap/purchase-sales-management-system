@@ -1,0 +1,115 @@
+:root {
+    color-scheme: light;
+}
+
+body {
+    margin: 0;
+    color: #172b4d;
+    background: #fff;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.login-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    min-height: 100svh;
+}
+
+.login-branding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #064bb6;
+}
+
+.login-branding-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: calc(100svh - 48px);
+    object-fit: contain;
+}
+
+.login-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 48px;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-eyebrow {
+    margin-bottom: 12px;
+    color: #0759c7;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.login-form-container h1 {
+    margin-bottom: 12px;
+    font-size: clamp(1.65rem, 2.5vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+}
+
+.login-description {
+    margin-bottom: 32px;
+    color: #627087;
+    line-height: 1.7;
+}
+
+.login-panel .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.login-panel .form-control {
+    min-height: 50px;
+    padding: 12px 14px;
+    border-color: #cbd5e1;
+    border-radius: 8px;
+}
+
+.login-panel .form-control:focus {
+    border-color: #0866df;
+    box-shadow: 0 0 0 3px rgb(8 102 223 / 15%);
+}
+
+.login-submit {
+    min-height: 50px;
+    border-radius: 8px;
+    font-weight: 600;
+    background-color: #0759c7;
+    border-color: #0759c7;
+}
+
+.login-submit:hover {
+    background-color: #0649a3;
+    border-color: #0649a3;
+}
+
+@media (max-width: 767.98px) {
+    .login-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .login-branding {
+        padding: 24px;
+    }
+
+    .login-branding-image {
+        max-width: 320px;
+        max-height: none;
+    }
+
+    .login-panel {
+        padding: 40px 24px 48px;
+    }
+}
