@@ -1,0 +1,1 @@
+<table class="signatures"><tr>@foreach($signatures as $label => $name)<td><strong>{{ $label }}</strong><div class="sign-space"></div><div class="sign-name">{{ $name ?: '(________________________)' }}</div><div class="muted">Tanda tangan / tanggal</div></td>@endforeach</tr></table>

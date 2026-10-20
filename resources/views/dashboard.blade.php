@@ -1,0 +1,28 @@
+@extends('layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
+    <section class="hero-banner" aria-labelledby="dashboard-greeting">
+        <div class="hero-copy"><span class="hero-eyebrow"><span class="hero-dot"></span> YOUR BUSINESS, AT A GLANCE</span><h1 id="dashboard-greeting">{{ $greeting }} 👋</h1><p>Semua aktivitas bisnis dalam satu dashboard.<br class="d-none d-md-block"> Pantau pembelian, penjualan, dan mitra Anda hari ini.</p><a class="btn btn-light hero-action" href="{{ route('supplier.create') }}"><i class="bi bi-plus-lg me-2" aria-hidden="true"></i>Tambah Supplier<i class="bi bi-arrow-up-right ms-3" aria-hidden="true"></i></a></div>
+        <div class="hero-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><div class="hero-mini-card"><span class="mini-card-icon"><i class="bi bi-bar-chart-line"></i></span><span>Business overview</span><strong>Keep moving forward.</strong><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><span class="hero-float"><i class="bi bi-check-lg"></i></span></div>
+    </section>
+
+    <div class="section-heading" id="overview"><div><h2>Ringkasan bisnis</h2><p>Gambaran seluruh data di workspace Anda.</p></div><span class="date-label"><i class="bi bi-calendar3 me-2" aria-hidden="true"></i>{{ $today->copy()->locale('id')->translatedFormat('d F Y') }}</span></div>
+    <div class="row g-3 g-xl-4 mb-4">
+        @foreach ([['Total Purchase Order', $stats['purchase_orders'], 'bag-check', 'blue', 'Dokumen pembelian'], ['Total Sales Order', $stats['sales_orders'], 'cart3', 'teal', 'Dokumen penjualan'], ['Total Supplier', $stats['suppliers'], 'truck', 'violet', 'Mitra pemasok'], ['Total Customer', $stats['customers'], 'people', 'amber', 'Mitra pelanggan']] as [$label, $value, $icon, $color, $caption])
+            <div class="col-12 col-sm-6 col-xl-3"><article class="surface-card stat-card"><div class="stat-top"><span class="stat-icon {{ $color }}"><i class="bi bi-{{ $icon }}" aria-hidden="true"></i></span><span class="stat-caption">{{ $caption }}</span></div><p class="stat-label">{{ $label }}</p><h3 class="stat-value">{{ number_format($value, 0, ',', '.') }}</h3><div class="stat-footer"><span class="status-dot"></span>Total data tercatat</div></article></div>
+        @endforeach
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8"><section class="surface-card chart-card" id="purchase-sales-chart" aria-labelledby="chart-title"><div class="card-heading"><div><span class="eyebrow">PERFORMA BISNIS</span><h2 id="chart-title">Purchase vs Sales</h2><p>Nilai order dalam 6 bulan terakhir.</p></div><span class="period-chip">6 bulan</span></div><div class="chart-summary"><div><span><i class="legend-dot purchase"></i>Purchase</span><strong>Rp {{ number_format(array_sum($chart['purchase']), 0, ',', '.') }}</strong></div><div><span><i class="legend-dot sales"></i>Sales</span><strong>Rp {{ number_format(array_sum($chart['sales']), 0, ',', '.') }}</strong></div></div><div class="chart-container"><canvas id="purchaseSalesChart" role="img" aria-label="Grafik nilai purchase order dan sales order bulanan. Rincian tersedia di tabel berikut."></canvas></div><details class="chart-details"><summary>Lihat rincian bulanan</summary><div class="table-responsive mt-3"><table class="table table-sm"><caption class="visually-hidden">Nilai order bulanan dalam rupiah</caption><thead><tr><th scope="col">Bulan</th><th scope="col">Purchase</th><th scope="col">Sales</th></tr></thead><tbody>@foreach($chart['labels'] as $i => $month)<tr><th scope="row">{{ $month }}</th><td>Rp {{ number_format($chart['purchase'][$i], 0, ',', '.') }}</td><td>Rp {{ number_format($chart['sales'][$i], 0, ',', '.') }}</td></tr>@endforeach</tbody></table></div></details>@if(array_sum($chart['purchase']) == 0 && array_sum($chart['sales']) == 0)<p class="chart-empty"><i class="bi bi-info-circle me-1" aria-hidden="true"></i>Belum ada nilai order pada periode ini.</p>@endif</section></div>
+        <div class="col-xl-4"><section class="surface-card quick-card"><div class="card-heading"><div><span class="eyebrow">MULAI DARI SINI</span><h2>Quick Access</h2><p>Jalan pintas untuk aktivitas Anda.</p></div></div><a class="quick-link" href="{{ route('supplier.create') }}"><span class="quick-icon blue"><i class="bi bi-person-plus" aria-hidden="true"></i></span><span><strong>Tambah Supplier</strong><small>Daftarkan mitra pemasok baru</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a><a class="quick-link" href="{{ route('supplier.index') }}"><span class="quick-icon violet"><i class="bi bi-truck" aria-hidden="true"></i></span><span><strong>Kelola Supplier</strong><small>Lihat dan perbarui data pemasok</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a><a class="quick-link" href="#purchase-sales-chart"><span class="quick-icon teal"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span><span><strong>Ringkasan Transaksi</strong><small>Pantau nilai pembelian & penjualan</small></span><i class="bi bi-arrow-right" aria-hidden="true"></i></a><div class="quick-note"><i class="bi bi-lightbulb" aria-hidden="true"></i><p>Data mitra yang lengkap membantu proses transaksi berjalan lebih lancar.</p></div></section></div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script type="application/json" id="purchase-sales-data">{!! json_encode($chart, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
+    <script src="{{ asset('assets/vendor/chartjs/chart.umd.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard-chart.js') }}" defer></script>
+@endpush
